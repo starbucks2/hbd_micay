@@ -730,6 +730,17 @@
         <i class="fa-solid fa-arrow-up"></i>
     </button>
 
+    <!-- Record with Music Button -->
+    <div id="record-container" class="fixed bottom-8 right-24 z-[100]">
+        <button id="record-btn" title="Record with Music"
+            class="w-12 h-12 glass rounded-full border border-white/20 flex items-center justify-center transition-all duration-300 hover:bg-white/10 hover:scale-110">
+            <i id="record-icon" class="fa-solid fa-circle text-red-400"></i>
+        </button>
+        <div id="record-status" class="absolute -top-8 right-0 text-xs whitespace-nowrap text-white/60 hidden">
+            🔴 Recording...
+        </div>
+    </div>
+
     <!-- Image Modal -->
     <div id="image-modal" class="fixed inset-0 z-[1000] flex items-center justify-center bg-black/90 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 p-4">
         <button class="absolute top-8 right-8 text-white text-3xl focus:outline-none" onclick="closeModal()">

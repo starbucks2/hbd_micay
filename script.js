@@ -212,4 +212,142 @@ document.addEventListener('DOMContentLoaded', () => {
         star.style.animationDuration = (Math.random() * 3 + 2) + 's';
         hero.appendChild(star);
     }
+    // 12. Record with Music Feature
+    const recordBtn = document.getElementById('record-btn');
+    const recordIcon = document.getElementById('record-icon');
+    const recordStatus = document.getElementById('record-status');
+    let mediaRecorder = null;
+    let recordedChunks = [];
+    let audioCtx = null;
+    let recordingActive = false;
+
+    async function startRecording() {
+        try {
+            recordedChunks = [];
+
+            // Set up Web Audio context to capture bg-music
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const dest = audioCtx.createMediaStreamDestination();
+
+            const music = document.getElementById('bg-music');
+            const source = audioCtx.createMediaElementSource(music);
+            source.connect(dest);
+            source.connect(audioCtx.destination); // keep playing through speakers
+
+            const audioStream = dest.stream;
+
+            // Try screen capture (desktop/some Android)
+            let combinedStream;
+            if (navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia) {
+                try {
+                    const screenStream = await navigator.mediaDevices.getDisplayMedia({
+                        video: { mediaSource: 'screen' },
+                        audio: false // we handle audio ourselves
+                    });
+
+                    // Combine screen video + music audio
+                    combinedStream = new MediaStream([
+                        ...screenStream.getVideoTracks(),
+                        ...audioStream.getAudioTracks()
+                    ]);
+
+                    // Stop recording when user stops screen share
+                    screenStream.getVideoTracks()[0].addEventListener('ended', () => {
+                        if (recordingActive) stopRecording();
+                    });
+                } catch (screenErr) {
+                    // Screen capture denied or unavailable on this device
+                    // Fall back to audio-only recording
+                    combinedStream = audioStream;
+                    Swal.fire({
+                        title: 'Screen capture not available',
+                        text: 'Recording audio only. The music will be saved as an audio file you can use while screen recording.',
+                        icon: 'info',
+                        background: '#1a1a1a',
+                        color: '#fff',
+                        confirmButtonColor: '#B6E3E9',
+                        timer: 4000,
+                        showConfirmButton: false
+                    });
+                }
+            } else {
+                // Mobile fallback: audio-only
+                combinedStream = audioStream;
+                Swal.fire({
+                    title: 'Tip for Mobile 📱',
+                    html: 'Your browser will record the <b>music audio</b>.<br>Play this alongside your screen recording for best results!',
+                    icon: 'info',
+                    background: '#1a1a1a',
+                    color: '#fff',
+                    confirmButtonColor: '#B6E3E9',
+                    timer: 5000,
+                    showConfirmButton: false
+                });
+            }
+
+            // Pick best supported format
+            const mimeType = MediaRecorder.isTypeSupported('video/webm;codecs=vp9,opus')
+                ? 'video/webm;codecs=vp9,opus'
+                : MediaRecorder.isTypeSupported('video/webm')
+                ? 'video/webm'
+                : 'audio/webm';
+
+            mediaRecorder = new MediaRecorder(combinedStream, { mimeType });
+
+            mediaRecorder.ondataavailable = (e) => {
+                if (e.data && e.data.size > 0) recordedChunks.push(e.data);
+            };
+
+            mediaRecorder.onstop = () => {
+                const blob = new Blob(recordedChunks, { type: mimeType });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                const ext = mimeType.startsWith('audio') ? 'webm' : 'webm';
+                a.href = url;
+                a.download = `micay-birthday-${Date.now()}.${ext}`;
+                a.click();
+                URL.revokeObjectURL(url);
+
+                // Clean up audio context
+                if (audioCtx) { audioCtx.close(); audioCtx = null; }
+                recordingActive = false;
+                recordIcon.className = 'fa-solid fa-circle text-red-400';
+                recordStatus.classList.add('hidden');
+                recordBtn.classList.remove('animate-pulse');
+            };
+
+            mediaRecorder.start(1000); // collect data every second
+            recordingActive = true;
+
+            recordIcon.className = 'fa-solid fa-stop text-red-500';
+            recordStatus.classList.remove('hidden');
+            recordBtn.classList.add('animate-pulse');
+
+        } catch (err) {
+            console.error('Recording error:', err);
+            Swal.fire({
+                title: 'Oops!',
+                text: 'Could not start recording. Please allow permissions and try again.',
+                icon: 'error',
+                background: '#1a1a1a',
+                color: '#fff',
+                confirmButtonColor: '#B6E3E9'
+            });
+        }
+    }
+
+    function stopRecording() {
+        if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+            mediaRecorder.stop();
+            mediaRecorder.stream.getTracks().forEach(t => t.stop());
+        }
+    }
+
+    recordBtn.addEventListener('click', () => {
+        if (!recordingActive) {
+            startRecording();
+        } else {
+            stopRecording();
+        }
+    });
 });
