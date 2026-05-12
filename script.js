@@ -176,19 +176,6 @@ document.addEventListener('DOMContentLoaded', () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    // 9. Video Playback Control
-    const videos = document.querySelectorAll('video:not(#modal-video)');
-    const overlays = document.querySelectorAll('.play-overlay');
-
-    overlays.forEach((overlay, idx) => {
-        overlay.addEventListener('click', () => {
-            const video = videos[idx];
-            const videoSrc = video.src || video.getAttribute('src');
-            if (videoSrc) {
-                openVideoModal(videoSrc);
-            }
-        });
-    });
 
     // 10. Image Modal logic
     window.openModal = function(src) {
@@ -210,31 +197,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target.id === 'image-modal') closeModal();
     });
 
-    // 11. Video Modal logic
-    window.openVideoModal = function(src) {
-        const modal = document.getElementById('video-modal');
-        const modalVideo = document.getElementById('modal-video');
-        modalVideo.src = src;
-        modalVideo.load();
-        modal.style.opacity = '1';
-        modal.style.pointerEvents = 'auto';
-        modalVideo.play();
-        document.body.style.overflow = 'hidden';
-    };
-
-    window.closeVideoModal = function() {
-        const modal = document.getElementById('video-modal');
-        const modalVideo = document.getElementById('modal-video');
-        modalVideo.pause();
-        modal.style.opacity = '0';
-        modal.style.pointerEvents = 'none';
-        document.body.style.overflow = 'auto';
-    };
-
-    // Close video modal on background click
-    document.getElementById('video-modal').addEventListener('click', (e) => {
-        if (e.target.id === 'video-modal') closeVideoModal();
-    });
 
     // 11. Particles Background for Hero
     // Injecting simple floating particles for background
