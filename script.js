@@ -8,30 +8,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 2. Loading Screen Logic
     const loader = document.getElementById('loader');
-    const loaderParticles = document.getElementById('loader-particles');
-
     // Create particles for loader
-    for (let i = 0; i < 50; i++) {
-        const p = document.createElement('div');
-        p.className = 'loader-particle';
-        p.style.left = Math.random() * 100 + 'vw';
-        p.style.width = Math.random() * 5 + 'px';
-        p.style.height = p.style.width;
-        p.style.animationDuration = (Math.random() * 3 + 2) + 's';
-        p.style.animationDelay = Math.random() * 5 + 's';
-        loaderParticles.appendChild(p);
+    const loaderParticles = document.getElementById('loader-particles');
+    if (loaderParticles) {
+        for (let i = 0; i < 20; i++) {
+            const p = document.createElement('div');
+            p.className = 'loader-particle';
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.width = (Math.random() * 5 + 2) + 'px';
+            p.style.height = p.style.width;
+            p.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            p.style.animationDelay = Math.random() * 5 + 's';
+            loaderParticles.appendChild(p);
+        }
     }
 
-    window.addEventListener('load', () => {
+    const hideLoader = () => {
+        loader.style.opacity = '0';
+        loader.style.transition = 'opacity 1s ease';
         setTimeout(() => {
-            loader.style.opacity = '0';
-            loader.style.transition = 'opacity 1s ease';
-            setTimeout(() => {
-                loader.style.display = 'none';
-                showWelcomePopup();
-            }, 1000);
-        }, 2000);
-    });
+            loader.style.display = 'none';
+            showWelcomePopup();
+        }, 1000);
+    };
+
+    // Hide loader when page is fully loaded OR after 3 seconds fallback
+    window.addEventListener('load', hideLoader);
+    setTimeout(hideLoader, 3000); // Fallback to ensure user isn't stuck
 
     // 3. SweetAlert2 Welcome Message
     function showWelcomePopup() {
@@ -174,18 +177,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // 9. Video Playback Control
-    const videos = document.querySelectorAll('video');
+    const videos = document.querySelectorAll('video:not(#modal-video)');
     const overlays = document.querySelectorAll('.play-overlay');
 
     overlays.forEach((overlay, idx) => {
         overlay.addEventListener('click', () => {
             const video = videos[idx];
-            if (video.paused) {
-                video.play();
-                overlay.style.opacity = '0';
-            } else {
-                video.pause();
-                overlay.style.opacity = '1';
+            const videoSrc = video.src || video.getAttribute('src');
+            if (videoSrc) {
+                openVideoModal(videoSrc);
             }
         });
     });
@@ -208,6 +208,32 @@ document.addEventListener('DOMContentLoaded', () => {
     // Close modal on background click
     document.getElementById('image-modal').addEventListener('click', (e) => {
         if (e.target.id === 'image-modal') closeModal();
+    });
+
+    // 11. Video Modal logic
+    window.openVideoModal = function(src) {
+        const modal = document.getElementById('video-modal');
+        const modalVideo = document.getElementById('modal-video');
+        modalVideo.src = src;
+        modalVideo.load();
+        modal.style.opacity = '1';
+        modal.style.pointerEvents = 'auto';
+        modalVideo.play();
+        document.body.style.overflow = 'hidden';
+    };
+
+    window.closeVideoModal = function() {
+        const modal = document.getElementById('video-modal');
+        const modalVideo = document.getElementById('modal-video');
+        modalVideo.pause();
+        modal.style.opacity = '0';
+        modal.style.pointerEvents = 'none';
+        document.body.style.overflow = 'auto';
+    };
+
+    // Close video modal on background click
+    document.getElementById('video-modal').addEventListener('click', (e) => {
+        if (e.target.id === 'video-modal') closeVideoModal();
     });
 
     // 11. Particles Background for Hero

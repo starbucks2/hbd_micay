@@ -9,6 +9,13 @@
     <meta name="description" content="Happy 22nd Birthday Micay! Celebrating friendship, memories, and our journey together with Team Blue.">
     <meta name="keywords" content="Micay, Birthday, 22nd Birthday, Team Blue, Friendship, Celebration">
     
+    <!-- Resource Hints -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://unpkg.com">
+
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     
@@ -126,7 +133,7 @@
                 <!-- Solo Images -->
                 <div class="break-inside-avoid" data-aos="zoom-in">
                     <div class="gallery-card relative overflow-hidden rounded-2xl glass border border-white/10 group cursor-pointer" onclick="openModal('assets/solo/04243e4f-dae6-4576-b6ff-6a954d37e7d3.jfif')">
-                        <img src="assets/solo/04243e4f-dae6-4576-b6ff-6a954d37e7d3.jfif" alt="Micay Solo" class="w-full h-auto transition-transform duration-700 group-hover:scale-110">
+                        <img src="assets/solo/04243e4f-dae6-4576-b6ff-6a954d37e7d3.jfif" alt="Micay Solo" class="w-full h-auto transition-transform duration-700 group-hover:scale-110" loading="lazy">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                             <span class="text-white font-medium">Stunning Moment</span>
                         </div>
@@ -200,7 +207,7 @@
                 <div class="polaroid-wrapper" data-aos="flip-left" data-aos-duration="1000">
                     <div class="polaroid bg-white p-4 shadow-xl transition-all duration-500 hover:rotate-3 hover:scale-105 cursor-pointer" onclick="openModal('assets/images/026385d3-fd9d-455e-9e0c-6d141f21ea1a.jfif')">
                         <div class="overflow-hidden aspect-square">
-                            <img src="assets/images/026385d3-fd9d-455e-9e0c-6d141f21ea1a.jfif" alt="Group Memory" class="w-full h-full object-cover">
+                            <img src="assets/images/026385d3-fd9d-455e-9e0c-6d141f21ea1a.jfif" alt="Group Memory" class="w-full h-full object-cover" loading="lazy">
                         </div>
                         <div class="pt-6 pb-2 text-center">
                             <p class="font-playfair text-[#333] text-lg">Soon to be graduates together.</p>
@@ -609,7 +616,7 @@
                 <!-- Video 1 -->
                 <div class="video-card glass p-4 rounded-3xl group transition-all duration-500 hover:shadow-[0_0_30px_rgba(182,227,233,0.3)]" data-aos="fade-up">
                     <div class="relative rounded-2xl overflow-hidden aspect-video">
-                        <video src="assets/videos/4bafa96c-a8ae-46e4-b833-0c1a1f01fbeb.mp4" class="w-full h-full object-cover"></video>
+                        <video src="assets/videos/4bafa96c-a8ae-46e4-b833-0c1a1f01fbeb.mp4" class="w-full h-full object-contain bg-black"></video>
                         <div class="absolute inset-0 flex items-center justify-center bg-black/40 group-hover:bg-black/20 transition-all cursor-pointer play-overlay">
                             <div class="w-16 h-16 flex items-center justify-center bg-white/20 backdrop-blur-md rounded-full border border-white/40 group-hover:scale-110 transition-transform">
                                 <i class="fa-solid fa-play text-2xl"></i>
@@ -620,7 +627,7 @@
                 <!-- Video 2 -->
                 <div class="video-card glass p-4 rounded-3xl group transition-all duration-500 hover:shadow-[0_0_30px_rgba(251,209,215,0.3)]" data-aos="fade-up" data-aos-delay="200">
                     <div class="relative rounded-2xl overflow-hidden aspect-video">
-                        <video src="assets/videos/702be2f8-5251-48e5-b6ed-cb6fcebebcaf.mp4" class="w-full h-full object-cover"></video>
+                        <video src="assets/videos/702be2f8-5251-48e5-b6ed-cb6fcebebcaf.mp4" class="w-full h-full object-contain bg-black"></video>
                         <div class="absolute inset-0 flex items-center justify-center bg-black/40 group-hover:bg-black/20 transition-all cursor-pointer play-overlay">
                             <div class="w-16 h-16 flex items-center justify-center bg-white/20 backdrop-blur-md rounded-full border border-white/40 group-hover:scale-110 transition-transform">
                                 <i class="fa-solid fa-play text-2xl"></i>
@@ -631,7 +638,7 @@
                 <!-- Video 3 -->
                 <div class="video-card glass p-4 rounded-3xl group transition-all duration-500 hover:shadow-[0_0_30px_rgba(182,227,233,0.3)]" data-aos="fade-up" data-aos-delay="400">
                     <div class="relative rounded-2xl overflow-hidden aspect-video">
-                        <video src="assets/videos/e9e50d78-11c4-4121-b55a-738429f7c205.mp4" class="w-full h-full object-cover"></video>
+                        <video src="assets/videos/e9e50d78-11c4-4121-b55a-738429f7c205.mp4" class="w-full h-full object-contain bg-black"></video>
                         <div class="absolute inset-0 flex items-center justify-center bg-black/40 group-hover:bg-black/20 transition-all cursor-pointer play-overlay">
                             <div class="w-16 h-16 flex items-center justify-center bg-white/20 backdrop-blur-md rounded-full border border-white/40 group-hover:scale-110 transition-transform">
                                 <i class="fa-solid fa-play text-2xl"></i>
@@ -775,6 +782,16 @@
         </button>
         <div class="max-w-5xl w-full max-h-[90vh] flex items-center justify-center">
             <img id="modal-img" src="" alt="Preview" class="max-w-full max-h-full object-contain rounded-xl shadow-2xl">
+        </div>
+    </div>
+
+    <!-- Video Modal -->
+    <div id="video-modal" class="fixed inset-0 z-[1100] flex items-center justify-center bg-black/95 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-500 p-4">
+        <button class="absolute top-8 right-8 text-white text-3xl hover:text-pastelBlue transition-colors z-[1200]" onclick="closeVideoModal()">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div class="max-w-5xl w-full flex items-center justify-center">
+            <video id="modal-video" class="w-full max-h-[85vh] object-contain rounded-xl shadow-2xl" controls></video>
         </div>
     </div>
 
