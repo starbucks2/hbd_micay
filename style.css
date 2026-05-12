@@ -1,0 +1,217 @@
+/* Design System & Base Styles */
+:root {
+    --pastel-blue: #B6E3E9;
+    --pastel-pink: #FBD1D7;
+    --silver: #C0C0C0;
+    --dark-bg: #0a0a0a;
+}
+
+* {
+    scroll-behavior: smooth;
+}
+
+::selection {
+    background: var(--pastel-blue);
+    color: var(--dark-bg);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--dark-bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, var(--pastel-blue), var(--pastel-pink));
+    border-radius: 10px;
+}
+
+/* Glassmorphism Utility */
+.glass {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Animations */
+@keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(5deg); }
+}
+
+.animate-float {
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes gradient-move {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.animate-gradient-move {
+    animation: gradient-move 3s linear infinite;
+}
+
+/* Loading Screen Styles */
+.loader-particle {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    opacity: 0.3;
+    pointer-events: none;
+    animation: drift linear infinite;
+}
+
+@keyframes drift {
+    from { transform: translateY(100vh); }
+    to { transform: translateY(-10vh); }
+}
+
+/* Gallery Hover Effects */
+.gallery-card {
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gallery-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(182, 227, 233, 0.1);
+}
+
+/* Polaroid Styles */
+.polaroid {
+    transform: rotate(var(--rotation, 0deg));
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.polaroid-wrapper:nth-child(even) .polaroid {
+    --rotation: -2deg;
+}
+
+.polaroid-wrapper:nth-child(odd) .polaroid {
+    --rotation: 2deg;
+}
+
+.polaroid:hover {
+    --rotation: 0deg !important;
+    z-index: 50;
+}
+
+/* Music Player Progress */
+#music-progress {
+    box-shadow: 0 0 10px var(--pastel-pink);
+}
+
+/* Hero Title Glow */
+.hero-title {
+    text-shadow: 0 0 20px rgba(182, 227, 233, 0.3);
+}
+
+/* Background Glow Accents */
+#hero::before {
+    content: '';
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(182, 227, 233, 0.15) 0%, transparent 70%);
+    top: 20%;
+    left: 10%;
+    filter: blur(50px);
+    z-index: 1;
+}
+
+#hero::after {
+    content: '';
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(251, 209, 215, 0.1) 0%, transparent 70%);
+    bottom: 10%;
+    right: 5%;
+    filter: blur(60px);
+    z-index: 1;
+}
+
+/* Video Play Overlay */
+.play-overlay i {
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+}
+
+/* Modal Blur */
+#image-modal.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Responsive Grid for Masonry */
+@media (max-width: 768px) {
+    .columns-1 {
+        column-count: 2 !important;
+    }
+    
+    .hero-title {
+        font-size: 3.5rem !important;
+        line-height: 1.1;
+    }
+    
+    .polaroid {
+        padding: 0.5rem !important;
+    }
+    
+    .polaroid p {
+        font-size: 0.9rem !important;
+        padding-top: 0.5rem !important;
+    }
+    
+    #music-container .glass {
+        backdrop-filter: blur(5px);
+    }
+}
+
+@media (max-width: 480px) {
+    .columns-1 {
+        column-count: 1 !important;
+    }
+    
+    .hero-title {
+        font-size: 2.8rem !important;
+    }
+    
+    #message .glass {
+        padding: 2rem !important;
+    }
+    
+    #message p {
+        font-size: 1rem !important;
+    }
+}
+
+/* Glow on hover for video cards */
+.video-card:hover video {
+    transform: scale(1.05);
+    transition: transform 0.8s ease;
+}
+
+/* Confetti Button Animation */
+#celebrate-btn:hover {
+    box-shadow: 0 0 50px rgba(182, 227, 233, 0.4);
+}
+
+/* Timeline Glowing Connector */
+@media (min-width: 768px) {
+    .timeline-dot::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: inherit;
+        filter: blur(10px);
+        opacity: 0.7;
+        z-index: -1;
+    }
+}

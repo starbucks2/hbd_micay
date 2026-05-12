@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Micay's 22nd Birthday | A Celebration of Friendship</title>
+    
+    <!-- Meta Tags for SEO -->
+    <meta name="description" content="Happy 22nd Birthday Micay! Celebrating friendship, memories, and our journey together with Team Blue.">
+    <meta name="keywords" content="Micay, Birthday, 22nd Birthday, Team Blue, Friendship, Celebration">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pastelBlue: '#B6E3E9',
+                        pastelPink: '#FBD1D7',
+                        silver: '#C0C0C0',
+                    },
+                    fontFamily: {
+                        playfair: ['"Playfair Display"', 'serif'],
+                        poppins: ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- AOS (Animate On Scroll) -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-[#0a0a0a] text-white font-poppins overflow-x-hidden">
+
+    <!-- Loading Screen -->
+    <div id="loader" class="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#0a0a0a]">
+        <div class="loader-content text-center">
+            <h1 class="text-4xl md:text-6xl font-playfair mb-4 animate-pulse bg-gradient-to-r from-pastelBlue via-white to-pastelPink bg-clip-text text-transparent">
+                Happy 22nd Birthday Micay
+            </h1>
+            <div class="flex space-x-2 justify-center">
+                <div class="w-3 h-3 bg-pastelBlue rounded-full animate-bounce"></div>
+                <div class="w-3 h-3 bg-pastelPink rounded-full animate-bounce [animation-delay:0.2s]"></div>
+                <div class="w-3 h-3 bg-white rounded-full animate-bounce [animation-delay:0.4s]"></div>
+            </div>
+        </div>
+        <!-- Particles will be injected by script -->
+        <div id="loader-particles" class="absolute inset-0 pointer-events-none"></div>
+    </div>
+
+    <!-- Music Player -->
+    <div id="music-container" class="fixed bottom-6 left-6 md:bottom-8 md:left-8 z-[100] group">
+        <div class="glass flex items-center p-2 md:p-3 rounded-full shadow-2xl border border-white/20 transition-all duration-300 hover:scale-105">
+            <button id="music-toggle" class="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-pastelBlue text-[#0a0a0a] rounded-full focus:outline-none">
+                <i id="music-icon" class="fa-solid fa-play"></i>
+            </button>
+            <div class="max-w-0 overflow-hidden group-hover:max-w-[200px] transition-all duration-500 ease-in-out px-0 group-hover:px-4">
+                <p class="text-xs font-semibold whitespace-nowrap">Lifetime - Ben&Ben</p>
+                <div class="w-full bg-white/20 h-1 mt-1 rounded-full overflow-hidden">
+                    <div id="music-progress" class="bg-pastelPink h-full w-0 transition-all duration-300"></div>
+                </div>
+            </div>
+        </div>
+        <audio id="bg-music" src="assets/music/lifetime.mp3" loop></audio>
+    </div>
+
+    <!-- Progress Bar -->
+    <div id="scroll-progress" class="fixed top-0 left-0 h-1 bg-gradient-to-r from-pastelBlue to-pastelPink z-[1000] w-0"></div>
+
+    <!-- Hero Section -->
+    <section id="hero" class="relative h-screen flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 bg-[url('assets/images/teamblue.jfif')] bg-cover bg-center opacity-40 scale-105"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#0a0a0a]/60 to-[#0a0a0a]"></div>
+        
+        <!-- Animated Background Effects -->
+        <div id="particles-js" class="absolute inset-0"></div>
+        
+        <div class="relative z-10 text-center px-6" data-aos="fade-up" data-aos-duration="1500">
+            <h2 class="text-pastelBlue text-sm md:text-2xl font-semibold mb-2 tracking-[0.3em] uppercase">Happy 22nd Birthday</h2>
+            <h1 class="text-5xl md:text-9xl font-playfair mb-6 tracking-tight hero-title">
+                <span class="block">Micay</span>
+            </h1>
+            <p class="text-base md:text-xl text-white/70 max-w-2xl mx-auto mb-10 leading-relaxed">
+                Celebrating friendship, memories, and our journey together.
+            </p>
+            <a href="#solo-gallery" class="inline-flex items-center space-x-3 px-8 py-4 glass rounded-full hover:bg-white/10 transition-all duration-300 group">
+                <span>View Memories</span>
+                <i class="fa-solid fa-chevron-down animate-bounce group-hover:translate-y-1 transition-transform"></i>
+            </a>
+        </div>
+        
+        <!-- Floating Elements -->
+        <div class="floating-icons absolute inset-0 pointer-events-none">
+            <i class="fa-solid fa-heart text-pastelPink/20 text-4xl absolute top-[20%] left-[10%] animate-float"></i>
+            <i class="fa-solid fa-sparkles text-pastelBlue/20 text-3xl absolute top-[30%] right-[15%] animate-float [animation-delay:1s]"></i>
+            <i class="fa-solid fa-star text-white/20 text-2xl absolute bottom-[25%] left-[20%] animate-float [animation-delay:2s]"></i>
+        </div>
+    </section>
+
+    <!-- Solo Gallery Section -->
+    <section id="solo-gallery" class="py-24 px-4 bg-[#0a0a0a]">
+        <div class="container mx-auto">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-4xl md:text-5xl font-playfair mb-4">Beautiful Memories of Micay ✨</h2>
+                <div class="w-24 h-1 bg-pastelBlue mx-auto rounded-full"></div>
+            </div>
+            
+            <div id="solo-grid" class="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-6 space-y-6">
+                <!-- Solo Images -->
+                <div class="break-inside-avoid" data-aos="zoom-in">
+                    <div class="gallery-card relative overflow-hidden rounded-2xl glass border border-white/10 group cursor-pointer" onclick="openModal('assets/solo/04243e4f-dae6-4576-b6ff-6a954d37e7d3.jfif')">
+                        <img src="assets/solo/04243e4f-dae6-4576-b6ff-6a954d37e7d3.jfif" alt="Micay Solo" class="w-full h-auto transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                            <span class="text-white font-medium">Stunning Moment</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="break-inside-avoid" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="gallery-card relative overflow-hidden rounded-2xl glass border border-white/10 group cursor-pointer" onclick="openModal('assets/solo/0c4126e3-bd9e-4941-8812-75376e883aa4.jfif')">
+                        <img src="assets/solo/0c4126e3-bd9e-4941-8812-75376e883aa4.jfif" alt="Micay Solo" class="w-full h-auto transition-transform duration-700 group-hover:scale-110">
+                    </div>
+                </div>
+                <div class="break-inside-avoid" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="gallery-card relative overflow-hidden rounded-2xl glass border border-white/10 group cursor-pointer" onclick="openModal('assets/solo/2b86d31f-492a-4c49-b777-13e83a34c0d1.jfif')">
+                        <img src="assets/solo/2b86d31f-492a-4c49-b777-13e83a34c0d1.jfif" alt="Micay Solo" class="w-full h-auto transition-transform duration-700 group-hover:scale-110">
+                    </div>
+                </div>
+                <div class="break-inside-avoid" data-aos="zoom-in" data-aos-delay="300">
+                    <div class="gallery-card relative overflow-hidden rounded-2xl glass border border-white/10 group cursor-pointer" onclick="openModal('assets/solo/342b1cbf-61bd-40f6-a2c8-559d5f0c4337.jfif')">
+                        <img src="assets/solo/342b1cbf-61bd-40f6-a2c8-559d5f0c4337.jfif" alt="Micay Solo" class="w-full h-auto transition-transform duration-700 group-hover:scale-110">
+                    </div>
+                </div>
+                <div class="break-inside-avoid" data-aos="zoom-in" data-aos-delay="400">
+                    <div class="gallery-card relative overflow-hidden rounded-2xl glass border border-white/10 group cursor-pointer" onclick="openModal('assets/solo/44d7e27e-5e06-48d5-b7e3-c45705087632.jfif')">
+                        <img src="assets/solo/44d7e27e-5e06-48d5-b7e3-c45705087632.jfif" alt="Micay Solo" class="w-full h-auto transition-transform duration-700 group-hover:scale-110">
+                    </div>
+                </div>
+                <div class="break-inside-avoid" data-aos="zoom-in" data-aos-delay="500">
+                    <div class="gallery-card relative overflow-hidden rounded-2xl glass border border-white/10 group cursor-pointer" onclick="openModal('assets/solo/47816ce8-cec7-463c-9500-52bdee367f82.jfif')">
+                        <img src="assets/solo/47816ce8-cec7-463c-9500-52bdee367f82.jfif" alt="Micay Solo" class="w-full h-auto transition-transform duration-700 group-hover:scale-110">
+                    </div>
+                </div>
+                <div class="break-inside-avoid" data-aos="zoom-in" data-aos-delay="600">
+                    <div class="gallery-card relative overflow-hidden rounded-2xl glass border border-white/10 group cursor-pointer" onclick="openModal('assets/solo/4ab0fef2-ee51-43af-ba0e-5ba01053e6b0.jfif')">
+                        <img src="assets/solo/4ab0fef2-ee51-43af-ba0e-5ba01053e6b0.jfif" alt="Micay Solo" class="w-full h-auto transition-transform duration-700 group-hover:scale-110">
+                    </div>
+                </div>
+                <div class="break-inside-avoid" data-aos="zoom-in" data-aos-delay="700">
+                    <div class="gallery-card relative overflow-hidden rounded-2xl glass border border-white/10 group cursor-pointer" onclick="openModal('assets/solo/c2a430ef-b970-4476-8e24-ec91e8afef09.jfif')">
+                        <img src="assets/solo/c2a430ef-b970-4476-8e24-ec91e8afef09.jfif" alt="Micay Solo" class="w-full h-auto transition-transform duration-700 group-hover:scale-110">
+                    </div>
+                </div>
+                <div class="break-inside-avoid" data-aos="zoom-in" data-aos-delay="800">
+                    <div class="gallery-card relative overflow-hidden rounded-2xl glass border border-white/10 group cursor-pointer" onclick="openModal('assets/solo/e1cac420-fd56-4876-9923-56fed927cf22.jfif')">
+                        <img src="assets/solo/e1cac420-fd56-4876-9923-56fed927cf22.jfif" alt="Micay Solo" class="w-full h-auto transition-transform duration-700 group-hover:scale-110">
+                    </div>
+                </div>
+                <div class="break-inside-avoid" data-aos="zoom-in" data-aos-delay="900">
+                    <div class="gallery-card relative overflow-hidden rounded-2xl glass border border-white/10 group cursor-pointer" onclick="openModal('assets/solo/f019860b-de11-4373-9216-48d5832b3b6d.jfif')">
+                        <img src="assets/solo/f019860b-de11-4373-9216-48d5832b3b6d.jfif" alt="Micay Solo" class="w-full h-auto transition-transform duration-700 group-hover:scale-110">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Group Photos Section -->
+    <section id="group-gallery" class="py-24 px-4 bg-[#0d0d0d] relative overflow-hidden">
+        <!-- Floating bubbles background -->
+        <div class="absolute inset-0 opacity-10">
+            <div class="bubble w-20 h-20 bg-pastelBlue absolute top-[10%] left-[5%] rounded-full blur-3xl animate-float"></div>
+            <div class="bubble w-32 h-32 bg-pastelPink absolute bottom-[15%] right-[10%] rounded-full blur-3xl animate-float [animation-delay:2s]"></div>
+        </div>
+
+        <div class="container mx-auto relative z-10">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-4xl md:text-5xl font-playfair mb-4">Team Blue Memories 💙</h2>
+                <div class="w-24 h-1 bg-pastelPink mx-auto rounded-full"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-10">
+                <!-- Group Image 1 -->
+                <div class="polaroid-wrapper" data-aos="flip-left" data-aos-duration="1000">
+                    <div class="polaroid bg-white p-4 shadow-xl transition-all duration-500 hover:rotate-3 hover:scale-105 cursor-pointer" onclick="openModal('assets/images/026385d3-fd9d-455e-9e0c-6d141f21ea1a.jfif')">
+                        <div class="overflow-hidden aspect-square">
+                            <img src="assets/images/026385d3-fd9d-455e-9e0c-6d141f21ea1a.jfif" alt="Group Memory" class="w-full h-full object-cover">
+                        </div>
+                        <div class="pt-6 pb-2 text-center">
+                            <p class="font-playfair text-[#333] text-lg">Soon to be graduates together.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Group Image 2 -->
+                <div class="polaroid-wrapper" data-aos="flip-left" data-aos-duration="1000" data-aos-delay="100">
+                    <div class="polaroid bg-white p-4 shadow-xl transition-all duration-500 hover:-rotate-3 hover:scale-105 cursor-pointer" onclick="openModal('assets/images/08737cc0-b1bf-489b-bc32-4f7cad9fc46a.jfif')">
+                        <div class="overflow-hidden aspect-square">
+                            <img src="assets/images/08737cc0-b1bf-489b-bc32-4f7cad9fc46a.jfif" alt="Group Memory" class="w-full h-full object-cover">
+                        </div>
+                        <div class="pt-6 pb-2 text-center">
+                            <p class="font-playfair text-[#333] text-lg">Best college memories.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Group Image 3 -->
+                <div class="polaroid-wrapper" data-aos="flip-left" data-aos-duration="1000" data-aos-delay="200">
+                    <div class="polaroid bg-white p-4 shadow-xl transition-all duration-500 hover:rotate-2 hover:scale-105 cursor-pointer" onclick="openModal('assets/images/2b560a4b-a6ae-4705-9f3b-243858436b26.jfif')">
+                        <div class="overflow-hidden aspect-square">
+                            <img src="assets/images/2b560a4b-a6ae-4705-9f3b-243858436b26.jfif" alt="Group Memory" class="w-full h-full object-cover">
+                        </div>
+                        <div class="pt-6 pb-2 text-center">
+                            <p class="font-playfair text-[#333] text-lg">Friendship that became family.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Group Image 4 -->
+                <div class="polaroid-wrapper" data-aos="flip-left" data-aos-duration="1000" data-aos-delay="300">
+                    <div class="polaroid bg-white p-4 shadow-xl transition-all duration-500 hover:-rotate-2 hover:scale-105 cursor-pointer" onclick="openModal('assets/images/6e6ad701-4b5b-4cfb-98a4-3847df44a26f.jfif')">
+                        <div class="overflow-hidden aspect-square">
+                            <img src="assets/images/6e6ad701-4b5b-4cfb-98a4-3847df44a26f.jfif" alt="Group Memory" class="w-full h-full object-cover">
+                        </div>
+                        <div class="pt-6 pb-2 text-center">
+                            <p class="font-playfair text-[#333] text-lg">Always together.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Group Image 5 -->
+                <div class="polaroid-wrapper" data-aos="flip-left" data-aos-duration="1000" data-aos-delay="100">
+                    <div class="polaroid bg-white p-4 shadow-xl transition-all duration-500 hover:rotate-3 hover:scale-105 cursor-pointer" onclick="openModal('assets/images/053d8fd6-29f6-4b3f-8199-2b864d94a8d0.jfif')">
+                        <div class="overflow-hidden aspect-square">
+                            <img src="assets/images/053d8fd6-29f6-4b3f-8199-2b864d94a8d0.jfif" alt="Group Memory" class="w-full h-full object-cover">
+                        </div>
+                        <div class="pt-6 pb-2 text-center">
+                            <p class="font-playfair text-[#333] text-lg">Team Blue squad goal.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Group Image 6 -->
+                <div class="polaroid-wrapper" data-aos="flip-left" data-aos-duration="1000" data-aos-delay="150">
+                    <div class="polaroid bg-white p-4 shadow-xl transition-all duration-500 hover:-rotate-3 hover:scale-105 cursor-pointer" onclick="openModal('assets/images/0690540b-c80d-49e3-ad01-8c28aa50a123.jfif')">
+                        <div class="overflow-hidden aspect-square">
+                            <img src="assets/images/0690540b-c80d-49e3-ad01-8c28aa50a123.jfif" alt="Group Memory" class="w-full h-full object-cover">
+                        </div>
+                        <div class="pt-6 pb-2 text-center">
+                            <p class="font-playfair text-[#333] text-lg">Forever grateful.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Group Image 7 -->
+                <div class="polaroid-wrapper" data-aos="flip-left" data-aos-duration="1000" data-aos-delay="200">
+                    <div class="polaroid bg-white p-4 shadow-xl transition-all duration-500 hover:rotate-3 hover:scale-105 cursor-pointer" onclick="openModal('assets/images/0d23f0e5-178b-4098-8d43-321f2fa8bb57.jfif')">
+                        <div class="overflow-hidden aspect-square">
+                            <img src="assets/images/0d23f0e5-178b-4098-8d43-321f2fa8bb57.jfif" alt="Group Memory" class="w-full h-full object-cover">
+                        </div>
+                        <div class="pt-6 pb-2 text-center">
+                            <p class="font-playfair text-[#333] text-lg">Best classmates.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Group Image 8 -->
+                <div class="polaroid-wrapper" data-aos="flip-left" data-aos-duration="1000" data-aos-delay="250">
+                    <div class="polaroid bg-white p-4 shadow-xl transition-all duration-500 hover:-rotate-3 hover:scale-105 cursor-pointer" onclick="openModal('assets/images/0e34eb7c-b411-45e4-b7ba-04a53d80e576.jfif')">
+                        <div class="overflow-hidden aspect-square">
+                            <img src="assets/images/0e34eb7c-b411-45e4-b7ba-04a53d80e576.jfif" alt="Group Memory" class="w-full h-full object-cover">
+                        </div>
+                        <div class="pt-6 pb-2 text-center">
+                            <p class="font-playfair text-[#333] text-lg">Laughter with you.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Group Image 9 -->
+                <div class="polaroid-wrapper" data-aos="flip-left" data-aos-duration="1000" data-aos-delay="300">
+                    <div class="polaroid bg-white p-4 shadow-xl transition-all duration-500 hover:rotate-3 hover:scale-105 cursor-pointer" onclick="openModal('assets/images/1b016490-2015-41a4-8a58-39c320e17b3b.jfif')">
+                        <div class="overflow-hidden aspect-square">
+                            <img src="assets/images/1b016490-2015-41a4-8a58-39c320e17b3b.jfif" alt="Group Memory" class="w-full h-full object-cover">
+                        </div>
+                        <div class="pt-6 pb-2 text-center">
+                            <p class="font-playfair text-[#333] text-lg">Making memories.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Group Image 10 -->
+                <div class="polaroid-wrapper" data-aos="flip-left" data-aos-duration="1000" data-aos-delay="350">
+                    <div class="polaroid bg-white p-4 shadow-xl transition-all duration-500 hover:-rotate-3 hover:scale-105 cursor-pointer" onclick="openModal('assets/images/30d8ec3c-38d3-4ae4-8268-2a9500225e46.jfif')">
+                        <div class="overflow-hidden aspect-square">
+                            <img src="assets/images/30d8ec3c-38d3-4ae4-8268-2a9500225e46.jfif" alt="Group Memory" class="w-full h-full object-cover">
+                        </div>
+                        <div class="pt-6 pb-2 text-center">
+                            <p class="font-playfair text-[#333] text-lg">Team Blue forever.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Group Image 11 -->
+                <div class="polaroid-wrapper" data-aos="flip-left" data-aos-duration="1000" data-aos-delay="400">
+                    <div class="polaroid bg-white p-4 shadow-xl transition-all duration-500 hover:rotate-3 hover:scale-105 cursor-pointer" onclick="openModal('assets/images/364c41b6-b73b-4377-8abd-678decf11981.jfif')">
+                        <div class="overflow-hidden aspect-square">
+                            <img src="assets/images/364c41b6-b73b-4377-8abd-678decf11981.jfif" alt="Group Memory" class="w-full h-full object-cover">
+                        </div>
+                        <div class="pt-6 pb-2 text-center">
+                            <p class="font-playfair text-[#333] text-lg">Dreams together.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Group Image 12 -->
+                <div class="polaroid-wrapper" data-aos="flip-left" data-aos-duration="1000" data-aos-delay="450">
+                    <div class="polaroid bg-white p-4 shadow-xl transition-all duration-500 hover:-rotate-3 hover:scale-105 cursor-pointer" onclick="openModal('assets/images/393f2768-5ab6-46a7-8bd5-eafd563ec0fc.jfif')">
+                        <div class="overflow-hidden aspect-square">
+                            <img src="assets/images/393f2768-5ab6-46a7-8bd5-eafd563ec0fc.jfif" alt="Group Memory" class="w-full h-full object-cover">
+                        </div>
+                        <div class="pt-6 pb-2 text-center">
+                            <p class="font-playfair text-[#333] text-lg">Unforgettable.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Group Image 13 -->
+                <div class="polaroid-wrapper" data-aos="flip-left" data-aos-duration="1000" data-aos-delay="500">
+                    <div class="polaroid bg-white p-4 shadow-xl transition-all duration-500 hover:rotate-3 hover:scale-105 cursor-pointer" onclick="openModal('assets/images/399a4f73-31dd-47cd-897d-bad3c1b0aa73.jfif')">
+                        <div class="overflow-hidden aspect-square">
+                            <img src="assets/images/399a4f73-31dd-47cd-897d-bad3c1b0aa73.jfif" alt="Group Memory" class="w-full h-full object-cover">
+                        </div>
+                        <div class="pt-6 pb-2 text-center">
+                            <p class="font-playfair text-[#333] text-lg">Silly moments.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Group Image 14 -->
+                <div class="polaroid-wrapper" data-aos="flip-left" data-aos-duration="1000" data-aos-delay="550">
+                    <div class="polaroid bg-white p-4 shadow-xl transition-all duration-500 hover:-rotate-3 hover:scale-105 cursor-pointer" onclick="openModal('assets/images/3d0dd199-0f57-4558-8cc3-725ff4c2392d.jfif')">
+                        <div class="overflow-hidden aspect-square">
+                            <img src="assets/images/3d0dd199-0f57-4558-8cc3-725ff4c2392d.jfif" alt="Group Memory" class="w-full h-full object-cover">
+                        </div>
+                        <div class="pt-6 pb-2 text-center">
+                            <p class="font-playfair text-[#333] text-lg">Happy vibes.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Group Image 15 -->
+                <div class="polaroid-wrapper" data-aos="flip-left" data-aos-duration="1000" data-aos-delay="600">
+                    <div class="polaroid bg-white p-4 shadow-xl transition-all duration-500 hover:rotate-3 hover:scale-105 cursor-pointer" onclick="openModal('assets/images/3ee2fbe1-6e89-4ada-b346-1b4414ce2535.jfif')">
+                        <div class="overflow-hidden aspect-square">
+                            <img src="assets/images/3ee2fbe1-6e89-4ada-b346-1b4414ce2535.jfif" alt="Group Memory" class="w-full h-full object-cover">
+                        </div>
+                        <div class="pt-6 pb-2 text-center">
+                            <p class="font-playfair text-[#333] text-lg">Academic buddies.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Group Image 16 -->
+                <div class="polaroid-wrapper" data-aos="flip-left" data-aos-duration="1000" data-aos-delay="650">
+                    <div class="polaroid bg-white p-4 shadow-xl transition-all duration-500 hover:-rotate-3 hover:scale-105 cursor-pointer" onclick="openModal('assets/images/444b7b48-0747-4b03-9630-594ecb5d3104.jfif')">
+                        <div class="overflow-hidden aspect-square">
+                            <img src="assets/images/444b7b48-0747-4b03-9630-594ecb5d3104.jfif" alt="Group Memory" class="w-full h-full object-cover">
+                        </div>
+                        <div class="pt-6 pb-2 text-center">
+                            <p class="font-playfair text-[#333] text-lg">Stay connected.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Group Image 17 -->
+                <div class="polaroid-wrapper" data-aos="flip-left" data-aos-duration="1000" data-aos-delay="700">
+                    <div class="polaroid bg-white p-4 shadow-xl transition-all duration-500 hover:rotate-3 hover:scale-105 cursor-pointer" onclick="openModal('assets/images/48cadfda-d772-4f06-bde0-8605f7f37d05.jfif')">
+                        <div class="overflow-hidden aspect-square">
+                            <img src="assets/images/48cadfda-d772-4f06-bde0-8605f7f37d05.jfif" alt="Group Memory" class="w-full h-full object-cover">
+                        </div>
+                        <div class="pt-6 pb-2 text-center">
+                            <p class="font-playfair text-[#333] text-lg">Pure joy.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Group Image 18 -->
+                <div class="polaroid-wrapper" data-aos="flip-left" data-aos-duration="1000" data-aos-delay="750">
+                    <div class="polaroid bg-white p-4 shadow-xl transition-all duration-500 hover:-rotate-3 hover:scale-105 cursor-pointer" onclick="openModal('assets/images/5db6bba4-00f2-43e4-b3ab-1dd7fc75a7cc.jfif')">
+                        <div class="overflow-hidden aspect-square">
+                            <img src="assets/images/5db6bba4-00f2-43e4-b3ab-1dd7fc75a7cc.jfif" alt="Group Memory" class="w-full h-full object-cover">
+                        </div>
+                        <div class="pt-6 pb-2 text-center">
+                            <p class="font-playfair text-[#333] text-lg">Grateful heart.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Group Image 20 -->
+                <div class="polaroid-wrapper" data-aos="flip-left" data-aos-duration="1000" data-aos-delay="850">
+                    <div class="polaroid bg-white p-4 shadow-xl transition-all duration-500 hover:-rotate-3 hover:scale-105 cursor-pointer" onclick="openModal('assets/images/6fca4817-b49e-4f50-a98a-ffac0797f98a.jfif')">
+                        <div class="overflow-hidden aspect-square">
+                            <img src="assets/images/6fca4817-b49e-4f50-a98a-ffac0797f98a.jfif" alt="Group Memory" class="w-full h-full object-cover">
+                        </div>
+                        <div class="pt-6 pb-2 text-center">
+                            <p class="font-playfair text-[#333] text-lg">Bright future.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Group Image 21 -->
+                <div class="polaroid-wrapper" data-aos="flip-left" data-aos-duration="1000" data-aos-delay="900">
+                    <div class="polaroid bg-white p-4 shadow-xl transition-all duration-500 hover:rotate-3 hover:scale-105 cursor-pointer" onclick="openModal('assets/images/77ba23b8-1269-4899-9c7e-71ac4f7796a6.jfif')">
+                        <div class="overflow-hidden aspect-square">
+                            <img src="assets/images/77ba23b8-1269-4899-9c7e-71ac4f7796a6.jfif" alt="Group Memory" class="w-full h-full object-cover">
+                        </div>
+                        <div class="pt-6 pb-2 text-center">
+                            <p class="font-playfair text-[#333] text-lg">Solid Team Blue.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Group Image 22 -->
+                <div class="polaroid-wrapper" data-aos="flip-left" data-aos-duration="1000" data-aos-delay="950">
+                    <div class="polaroid bg-white p-4 shadow-xl transition-all duration-500 hover:-rotate-3 hover:scale-105 cursor-pointer" onclick="openModal('assets/images/8fa77597-dc63-4461-9f24-0072f51aff2f.jfif')">
+                        <div class="overflow-hidden aspect-square">
+                            <img src="assets/images/8fa77597-dc63-4461-9f24-0072f51aff2f.jfif" alt="Group Memory" class="w-full h-full object-cover">
+                        </div>
+                        <div class="pt-6 pb-2 text-center">
+                            <p class="font-playfair text-[#333] text-lg">Keep shining.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Group Image 23 -->
+                <div class="polaroid-wrapper" data-aos="flip-left" data-aos-duration="1000" data-aos-delay="1000">
+                    <div class="polaroid bg-white p-4 shadow-xl transition-all duration-500 hover:rotate-3 hover:scale-105 cursor-pointer" onclick="openModal('assets/images/9366cfe9-5a8d-4522-b661-8bb208ca1f3a.jfif')">
+                        <div class="overflow-hidden aspect-square">
+                            <img src="assets/images/9366cfe9-5a8d-4522-b661-8bb208ca1f3a.jfif" alt="Group Memory" class="w-full h-full object-cover">
+                        </div>
+                        <div class="pt-6 pb-2 text-center">
+                            <p class="font-playfair text-[#333] text-lg">Grateful for you.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Group Image 24 -->
+                <div class="polaroid-wrapper" data-aos="flip-left" data-aos-duration="1000" data-aos-delay="1050">
+                    <div class="polaroid bg-white p-4 shadow-xl transition-all duration-500 hover:-rotate-3 hover:scale-105 cursor-pointer" onclick="openModal('assets/images/9b4419ef-81b3-429e-8d66-d4c111f95295.jfif')">
+                        <div class="overflow-hidden aspect-square">
+                            <img src="assets/images/9b4419ef-81b3-429e-8d66-d4c111f95295.jfif" alt="Group Memory" class="w-full h-full object-cover">
+                        </div>
+                        <div class="pt-6 pb-2 text-center">
+                            <p class="font-playfair text-[#333] text-lg">Memories that last.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Group Image 25 -->
+                <div class="polaroid-wrapper" data-aos="flip-left" data-aos-duration="1000" data-aos-delay="1100">
+                    <div class="polaroid bg-white p-4 shadow-xl transition-all duration-500 hover:rotate-3 hover:scale-105 cursor-pointer" onclick="openModal('assets/images/a07955d9-dd89-4eeb-be4d-1f21b5e1f4bd.jfif')">
+                        <div class="overflow-hidden aspect-square">
+                            <img src="assets/images/a07955d9-dd89-4eeb-be4d-1f21b5e1f4bd.jfif" alt="Group Memory" class="w-full h-full object-cover">
+                        </div>
+                        <div class="pt-6 pb-2 text-center">
+                            <p class="font-playfair text-[#333] text-lg">Golden times.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Group Image 26 -->
+                <div class="polaroid-wrapper" data-aos="flip-left" data-aos-duration="1000" data-aos-delay="1150">
+                    <div class="polaroid bg-white p-4 shadow-xl transition-all duration-500 hover:-rotate-3 hover:scale-105 cursor-pointer" onclick="openModal('assets/images/ab6b613d-2465-45ed-8e2f-77cbdd845cd2.jfif')">
+                        <div class="overflow-hidden aspect-square">
+                            <img src="assets/images/ab6b613d-2465-45ed-8e2f-77cbdd845cd2.jfif" alt="Group Memory" class="w-full h-full object-cover">
+                        </div>
+                        <div class="pt-6 pb-2 text-center">
+                            <p class="font-playfair text-[#333] text-lg">Best squad.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Group Image 27 -->
+                <div class="polaroid-wrapper" data-aos="flip-left" data-aos-duration="1000" data-aos-delay="1200">
+                    <div class="polaroid bg-white p-4 shadow-xl transition-all duration-500 hover:rotate-3 hover:scale-105 cursor-pointer" onclick="openModal('assets/images/afbc00dd-9e94-485b-a768-0e1eaa5c783c.jfif')">
+                        <div class="overflow-hidden aspect-square">
+                            <img src="assets/images/afbc00dd-9e94-485b-a768-0e1eaa5c783c.jfif" alt="Group Memory" class="w-full h-full object-cover">
+                        </div>
+                        <div class="pt-6 pb-2 text-center">
+                            <p class="font-playfair text-[#333] text-lg">Soon to be graduates.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Group Image 28 -->
+                <div class="polaroid-wrapper" data-aos="flip-left" data-aos-duration="1000" data-aos-delay="1250">
+                    <div class="polaroid bg-white p-4 shadow-xl transition-all duration-500 hover:-rotate-3 hover:scale-105 cursor-pointer" onclick="openModal('assets/images/beb1334c-0c63-411f-890d-6a0a88e5d1d9.jfif')">
+                        <div class="overflow-hidden aspect-square">
+                            <img src="assets/images/beb1334c-0c63-411f-890d-6a0a88e5d1d9.jfif" alt="Group Memory" class="w-full h-full object-cover">
+                        </div>
+                        <div class="pt-6 pb-2 text-center">
+                            <p class="font-playfair text-[#333] text-lg">Infinite laughter.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Group Image 29 -->
+                <div class="polaroid-wrapper" data-aos="flip-left" data-aos-duration="1000" data-aos-delay="1300">
+                    <div class="polaroid bg-white p-4 shadow-xl transition-all duration-500 hover:rotate-3 hover:scale-105 cursor-pointer" onclick="openModal('assets/images/bebeb929-6b9c-45fd-9380-98b2cf3ba579.jfif')">
+                        <div class="overflow-hidden aspect-square">
+                            <img src="assets/images/bebeb929-6b9c-45fd-9380-98b2cf3ba579.jfif" alt="Group Memory" class="w-full h-full object-cover">
+                        </div>
+                        <div class="pt-6 pb-2 text-center">
+                            <p class="font-playfair text-[#333] text-lg">Classroom fun.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Group Image 30 -->
+                <div class="polaroid-wrapper" data-aos="flip-left" data-aos-duration="1000" data-aos-delay="1350">
+                    <div class="polaroid bg-white p-4 shadow-xl transition-all duration-500 hover:-rotate-3 hover:scale-105 cursor-pointer" onclick="openModal('assets/images/bf29a877-8769-4d56-92b9-20bf399c0b98.jfif')">
+                        <div class="overflow-hidden aspect-square">
+                            <img src="assets/images/bf29a877-8769-4d56-92b9-20bf399c0b98.jfif" alt="Group Memory" class="w-full h-full object-cover">
+                        </div>
+                        <div class="pt-6 pb-2 text-center">
+                            <p class="font-playfair text-[#333] text-lg">Stay amazing.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Group Image 31 -->
+                <div class="polaroid-wrapper" data-aos="flip-left" data-aos-duration="1000" data-aos-delay="1400">
+                    <div class="polaroid bg-white p-4 shadow-xl transition-all duration-500 hover:rotate-3 hover:scale-105 cursor-pointer" onclick="openModal('assets/images/c1d8301f-1148-442e-a5f0-822c5f62b559.jfif')">
+                        <div class="overflow-hidden aspect-square">
+                            <img src="assets/images/c1d8301f-1148-442e-a5f0-822c5f62b559.jfif" alt="Group Memory" class="w-full h-full object-cover">
+                        </div>
+                        <div class="pt-6 pb-2 text-center">
+                            <p class="font-playfair text-[#333] text-lg">Team Blue vibes.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Group Image 32 -->
+                <div class="polaroid-wrapper" data-aos="flip-left" data-aos-duration="1000" data-aos-delay="1450">
+                    <div class="polaroid bg-white p-4 shadow-xl transition-all duration-500 hover:-rotate-3 hover:scale-105 cursor-pointer" onclick="openModal('assets/images/d10248a4-a71f-410c-9831-103e83d7243c.jfif')">
+                        <div class="overflow-hidden aspect-square">
+                            <img src="assets/images/d10248a4-a71f-410c-9831-103e83d7243c.jfif" alt="Group Memory" class="w-full h-full object-cover">
+                        </div>
+                        <div class="pt-6 pb-2 text-center">
+                            <p class="font-playfair text-[#333] text-lg">Achieving dreams.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Group Image 33 -->
+                <div class="polaroid-wrapper" data-aos="flip-left" data-aos-duration="1000" data-aos-delay="1500">
+                    <div class="polaroid bg-white p-4 shadow-xl transition-all duration-500 hover:rotate-3 hover:scale-105 cursor-pointer" onclick="openModal('assets/images/d36d5c20-0dbf-42e1-973c-d46216997ecb.jfif')">
+                        <div class="overflow-hidden aspect-square">
+                            <img src="assets/images/d36d5c20-0dbf-42e1-973c-d46216997ecb.jfif" alt="Group Memory" class="w-full h-full object-cover">
+                        </div>
+                        <div class="pt-6 pb-2 text-center">
+                            <p class="font-playfair text-[#333] text-lg">One for the books.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Group Image 34 -->
+                <div class="polaroid-wrapper" data-aos="flip-left" data-aos-duration="1000" data-aos-delay="1550">
+                    <div class="polaroid bg-white p-4 shadow-xl transition-all duration-500 hover:-rotate-3 hover:scale-105 cursor-pointer" onclick="openModal('assets/images/ddcbe8dc-ce34-4f2a-9c3e-1e764d8bee03.jfif')">
+                        <div class="overflow-hidden aspect-square">
+                            <img src="assets/images/ddcbe8dc-ce34-4f2a-9c3e-1e764d8bee03.jfif" alt="Group Memory" class="w-full h-full object-cover">
+                        </div>
+                        <div class="pt-6 pb-2 text-center">
+                            <p class="font-playfair text-[#333] text-lg">Bond of gold.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Group Image 35 -->
+                <div class="polaroid-wrapper" data-aos="flip-left" data-aos-duration="1000" data-aos-delay="1600">
+                    <div class="polaroid bg-white p-4 shadow-xl transition-all duration-500 hover:rotate-3 hover:scale-105 cursor-pointer" onclick="openModal('assets/images/eb65018b-a366-41fb-a239-00d2e0d0266d.jfif')">
+                        <div class="overflow-hidden aspect-square">
+                            <img src="assets/images/eb65018b-a366-41fb-a239-00d2e0d0266d.jfif" alt="Group Memory" class="w-full h-full object-cover">
+                        </div>
+                        <div class="pt-6 pb-2 text-center">
+                            <p class="font-playfair text-[#333] text-lg">Best squad ever.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Group Image 36 -->
+                <div class="polaroid-wrapper" data-aos="flip-left" data-aos-duration="1000" data-aos-delay="1650">
+                    <div class="polaroid bg-white p-4 shadow-xl transition-all duration-500 hover:-rotate-3 hover:scale-105 cursor-pointer" onclick="openModal('assets/images/edfb449f-ba41-42cb-b1bb-c3f52888337a.jfif')">
+                        <div class="overflow-hidden aspect-square">
+                            <img src="assets/images/edfb449f-ba41-42cb-b1bb-c3f52888337a.jfif" alt="Group Memory" class="w-full h-full object-cover">
+                        </div>
+                        <div class="pt-6 pb-2 text-center">
+                            <p class="font-playfair text-[#333] text-lg">Team Blue memories.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Group Image 37 -->
+                <div class="polaroid-wrapper" data-aos="flip-left" data-aos-duration="1000" data-aos-delay="1700">
+                    <div class="polaroid bg-white p-4 shadow-xl transition-all duration-500 hover:rotate-3 hover:scale-105 cursor-pointer" onclick="openModal('assets/images/teamblue.jfif')">
+                        <div class="overflow-hidden aspect-square">
+                            <img src="assets/images/teamblue.jfif" alt="Group Memory" class="w-full h-full object-cover">
+                        </div>
+                        <div class="pt-6 pb-2 text-center">
+                            <p class="font-playfair text-[#333] text-lg">The Official Team Blue!</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Add more group photos as needed -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Memories Section -->
+    <section id="video-memories" class="py-24 px-4 bg-[#0a0a0a]">
+        <div class="container mx-auto">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-4xl md:text-5xl font-playfair mb-4">Video Memories 🎥</h2>
+                <div class="w-24 h-1 bg-pastelBlue mx-auto rounded-full"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                <!-- Video 1 -->
+                <div class="video-card glass p-4 rounded-3xl group transition-all duration-500 hover:shadow-[0_0_30px_rgba(182,227,233,0.3)]" data-aos="fade-up">
+                    <div class="relative rounded-2xl overflow-hidden aspect-video">
+                        <video src="assets/videos/4bafa96c-a8ae-46e4-b833-0c1a1f01fbeb.mp4" class="w-full h-full object-cover"></video>
+                        <div class="absolute inset-0 flex items-center justify-center bg-black/40 group-hover:bg-black/20 transition-all cursor-pointer play-overlay">
+                            <div class="w-16 h-16 flex items-center justify-center bg-white/20 backdrop-blur-md rounded-full border border-white/40 group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-play text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Video 2 -->
+                <div class="video-card glass p-4 rounded-3xl group transition-all duration-500 hover:shadow-[0_0_30px_rgba(251,209,215,0.3)]" data-aos="fade-up" data-aos-delay="200">
+                    <div class="relative rounded-2xl overflow-hidden aspect-video">
+                        <video src="assets/videos/702be2f8-5251-48e5-b6ed-cb6fcebebcaf.mp4" class="w-full h-full object-cover"></video>
+                        <div class="absolute inset-0 flex items-center justify-center bg-black/40 group-hover:bg-black/20 transition-all cursor-pointer play-overlay">
+                            <div class="w-16 h-16 flex items-center justify-center bg-white/20 backdrop-blur-md rounded-full border border-white/40 group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-play text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Video 3 -->
+                <div class="video-card glass p-4 rounded-3xl group transition-all duration-500 hover:shadow-[0_0_30px_rgba(182,227,233,0.3)]" data-aos="fade-up" data-aos-delay="400">
+                    <div class="relative rounded-2xl overflow-hidden aspect-video">
+                        <video src="assets/videos/e9e50d78-11c4-4121-b55a-738429f7c205.mp4" class="w-full h-full object-cover"></video>
+                        <div class="absolute inset-0 flex items-center justify-center bg-black/40 group-hover:bg-black/20 transition-all cursor-pointer play-overlay">
+                            <div class="w-16 h-16 flex items-center justify-center bg-white/20 backdrop-blur-md rounded-full border border-white/40 group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-play text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section id="timeline" class="py-24 px-4 bg-[#0d0d0d]">
+        <div class="container mx-auto">
+            <div class="text-center mb-20" data-aos="fade-up">
+                <h2 class="text-4xl md:text-5xl font-playfair mb-4">Our Journey Together</h2>
+                <div class="w-24 h-1 bg-white/20 mx-auto rounded-full"></div>
+            </div>
+            
+            <div class="relative max-w-4xl mx-auto">
+                <!-- Vertical Line -->
+                <div class="absolute left-1/2 -translate-x-1/2 w-1 h-full bg-gradient-to-b from-pastelBlue via-white to-pastelPink rounded-full hidden md:block"></div>
+                
+                <!-- Timeline Item 1 -->
+                <div class="relative mb-20 md:flex items-center justify-between w-full" data-aos="fade-right">
+                    <div class="md:w-[45%] glass p-8 rounded-3xl border border-white/10 hover:border-pastelBlue/50 transition-colors">
+                        <div class="text-pastelBlue text-xl font-bold mb-2">First Meeting</div>
+                        <p class="text-white/70">The beginning of a friendship we never expected would grow so strong.</p>
+                        <div class="absolute -left-3 md:-left-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-pastelBlue rounded-full shadow-[0_0_15px_rgba(182,227,233,1)] md:hidden"></div>
+                    </div>
+                    <div class="absolute left-1/2 -translate-x-1/2 w-10 h-10 bg-pastelBlue rounded-full border-4 border-[#0d0d0d] z-10 shadow-[0_0_20px_rgba(182,227,233,0.5)] hidden md:flex items-center justify-center">
+                        <i class="fa-solid fa-handshake text-xs text-[#0a0a0a]"></i>
+                    </div>
+                    <div class="md:w-[45%]"></div>
+                </div>
+
+                <!-- Timeline Item 2 -->
+                <div class="relative mb-20 md:flex items-center justify-between w-full flex-row-reverse" data-aos="fade-left">
+                    <div class="md:w-[45%] glass p-8 rounded-3xl border border-white/10 hover:border-pastelPink/50 transition-colors">
+                        <div class="text-pastelPink text-xl font-bold mb-2">Funny Moments</div>
+                        <p class="text-white/70">Endless laughter in the classroom and during breaks that made school fun.</p>
+                        <div class="absolute -left-3 md:-left-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-pastelPink rounded-full shadow-[0_0_15px_rgba(251,209,215,1)] md:hidden"></div>
+                    </div>
+                    <div class="absolute left-1/2 -translate-x-1/2 w-10 h-10 bg-pastelPink rounded-full border-4 border-[#0d0d0d] z-10 shadow-[0_0_20px_rgba(251,209,215,0.5)] hidden md:flex items-center justify-center">
+                        <i class="fa-solid fa-face-grin-tears text-xs text-[#0a0a0a]"></i>
+                    </div>
+                    <div class="md:w-[45%]"></div>
+                </div>
+
+                <!-- Timeline Item 3 -->
+                <div class="relative mb-20 md:flex items-center justify-between w-full" data-aos="fade-right">
+                    <div class="md:w-[45%] glass p-8 rounded-3xl border border-white/10 hover:border-white/50 transition-colors">
+                        <div class="text-white text-xl font-bold mb-2">School Activities</div>
+                        <p class="text-white/70">From projects to exams, we supported each other every step of the way.</p>
+                        <div class="absolute -left-3 md:-left-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full shadow-[0_0_15px_rgba(255,255,255,0.8)] md:hidden"></div>
+                    </div>
+                    <div class="absolute left-1/2 -translate-x-1/2 w-10 h-10 bg-white rounded-full border-4 border-[#0d0d0d] z-10 shadow-[0_0_20px_rgba(255,255,255,0.3)] hidden md:flex items-center justify-center">
+                        <i class="fa-solid fa-book text-xs text-[#0a0a0a]"></i>
+                    </div>
+                    <div class="md:w-[45%]"></div>
+                </div>
+
+                <!-- Timeline Item 4 -->
+                <div class="relative md:flex items-center justify-between w-full flex-row-reverse" data-aos="fade-left">
+                    <div class="md:w-[45%] glass p-8 rounded-3xl border border-white/10 border-dashed hover:border-pastelBlue/50 transition-colors bg-pastelBlue/5">
+                        <div class="text-pastelBlue text-xl font-bold mb-2">Graduation Journey</div>
+                        <p class="text-white/70">Almost there! Soon to be graduates with Team Blue. The best is yet to come.</p>
+                        <div class="absolute -left-3 md:-left-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-pastelBlue rounded-full shadow-[0_0_15px_rgba(182,227,233,1)] md:hidden"></div>
+                    </div>
+                    <div class="absolute left-1/2 -translate-x-1/2 w-10 h-10 bg-pastelBlue rounded-full border-4 border-[#0d0d0d] z-10 shadow-[0_0_20px_rgba(182,227,233,0.5)] hidden md:flex items-center justify-center">
+                        <i class="fa-solid fa-graduation-cap text-xs text-[#0a0a0a]"></i>
+                    </div>
+                    <div class="md:w-[45%]"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Message Section -->
+    <section id="message" class="py-24 px-4 bg-gradient-to-b from-[#0d0d0d] to-[#0a0a0a]">
+        <div class="container mx-auto">
+            <div class="max-w-3xl mx-auto glass p-10 md:p-16 rounded-[3rem] border border-white/10 relative overflow-hidden" data-aos="zoom-in">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-pastelBlue/10 blur-3xl rounded-full"></div>
+                <div class="absolute bottom-0 left-0 w-32 h-32 bg-pastelPink/10 blur-3xl rounded-full"></div>
+                
+                <div class="relative z-10">
+                    <h2 class="text-3xl md:text-4xl font-playfair mb-8 text-center">A Special Message 💌</h2>
+                    <div class="text-lg md:text-xl leading-relaxed text-white/90 font-light italic">
+                        <span id="typing-text"></span>
+                        <span class="animate-pulse inline-block w-1 h-6 bg-pastelBlue ml-1 align-middle"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Celebration Button -->
+    <section class="py-20 text-center">
+        <button id="celebrate-btn" class="group relative px-12 py-6 bg-transparent rounded-full overflow-hidden transition-all duration-500 hover:scale-110 active:scale-95" data-aos="fade-up">
+            <div class="absolute inset-0 bg-gradient-to-r from-pastelBlue via-pastelPink to-pastelBlue bg-[length:200%_100%] animate-gradient-move"></div>
+            <div class="absolute inset-[2px] bg-[#0a0a0a] rounded-full group-hover:bg-transparent transition-colors duration-500"></div>
+            <span class="relative z-10 text-xl font-semibold bg-gradient-to-r from-pastelBlue to-pastelPink bg-clip-text text-transparent group-hover:text-white transition-colors duration-500 flex items-center space-x-3">
+                <i class="fa-solid fa-cake-candles"></i>
+                <span>Celebrate with Micay 🎉</span>
+            </span>
+        </button>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 px-4 border-t border-white/5 text-center">
+        <div class="container mx-auto">
+            <div class="flex justify-center space-x-6 mb-8">
+                <a href="#" class="w-12 h-12 flex items-center justify-center glass rounded-full hover:bg-pastelBlue/20 hover:text-pastelBlue transition-all transform hover:-translate-y-1">
+                    <i class="fa-brands fa-facebook-f"></i>
+                </a>
+                <a href="#" class="w-12 h-12 flex items-center justify-center glass rounded-full hover:bg-pastelPink/20 hover:text-pastelPink transition-all transform hover:-translate-y-1">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+                <a href="#" class="w-12 h-12 flex items-center justify-center glass rounded-full hover:bg-white/20 hover:text-white transition-all transform hover:-translate-y-1">
+                    <i class="fa-brands fa-tiktok"></i>
+                </a>
+            </div>
+            <p class="text-white/50 font-light">
+                Made with friendship and memories 💙
+            </p>
+            <p class="text-white/30 text-sm mt-2">
+                &copy; 2026 Micay's 22nd Birthday. All Rights Reserved.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="fixed bottom-8 right-8 w-12 h-12 glass rounded-full border border-white/20 flex items-center justify-center opacity-0 translate-y-10 pointer-events-none transition-all duration-500 z-[100] hover:bg-white/10">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+    <!-- Image Modal -->
+    <div id="image-modal" class="fixed inset-0 z-[1000] flex items-center justify-center bg-black/90 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 p-4">
+        <button class="absolute top-8 right-8 text-white text-3xl focus:outline-none" onclick="closeModal()">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div class="max-w-5xl w-full max-h-[90vh] flex items-center justify-center">
+            <img id="modal-img" src="" alt="Preview" class="max-w-full max-h-full object-contain rounded-xl shadow-2xl">
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
