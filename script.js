@@ -335,8 +335,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             setProg(20, 'Setting up encoder…');
 
-            // Video dimensions (landscape 16:9)
-            const W = 1280, H = 720, FPS = 30;
+            // Video dimensions: 720p HD (Dynamically choose Portrait for Mobile or Landscape for Desktop)
+            const isMobile = window.innerWidth < window.innerHeight;
+            const W = isMobile ? 720 : 1280;
+            const H = isMobile ? 1280 : 720;
+            const FPS = 30;
             const PAUSE = 2, SCROLL = 38, TOTAL = PAUSE * 2 + SCROLL;
             const FRAMES = TOTAL * FPS;
 
@@ -366,7 +369,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             vEnc.configure({
                 codec: 'avc1.42001f', width: W, height: H,
-                bitrate: 6_000_000, framerate: FPS
+                bitrate: 3_000_000, // 3 Mbps is perfect for smooth 720p playback on all devices
+                framerate: FPS
             });
 
             // Scale for popup
