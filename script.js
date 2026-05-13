@@ -339,7 +339,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const isMobile = window.innerWidth < window.innerHeight;
             const W = isMobile ? 720 : 1280;
             const H = isMobile ? 1280 : 720;
-            const FPS = 30;
+            const FPS = 60; // 60 FPS for perfectly smooth scrolling without judder
             const PAUSE = 2, SCROLL = 100, TOTAL = PAUSE * 2 + SCROLL; // 100 seconds of VERY slow scrolling
             const FRAMES = TOTAL * FPS;
 
@@ -391,16 +391,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     if (sec > PAUSE && sec < PAUSE + SCROLL) {
                         const t = (sec - PAUSE) / SCROLL;
-                        // smooth ease in-out
-                        const e = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-                        scrollY = e * maxScroll;
+                        // linear scroll for perfect constant speed (prevents dizzying acceleration)
+                        scrollY = t * maxScroll;
                     } else if (sec >= PAUSE + SCROLL) {
                         scrollY = maxScroll;
                     }
 
-                    const srcY = scrollY / scaleX;
-                    const srcH = Math.min(pageCanvas.height - srcY, H / scaleX);
-                    vCtx.drawImage(pageCanvas, 0, srcY, pageCanvas.width, srcH, 0, 0, W, srcH * scaleX);
+                    // Snap to exact pixels to prevent subpixel rendering artifacts (shaking)
+                    const srcY = Math.round(scrollY / scaleX);
+                    const srcH = Math.round(Math.min(pageCanvas.height - srcY, H / scaleX));
+                    const destH = Math.round(srcH * scaleX);
+                    
+                    vCtx.drawImage(pageCanvas, 0, srcY, pageCanvas.width, srcH, 0, 0, W, destH);
                 }
 
                 const frame = new VideoFrame(vCanvas, {
