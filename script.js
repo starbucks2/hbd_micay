@@ -270,13 +270,57 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // html2canvas DOES NOT support CSS 'columns-X' which causes vertical squished lines.
-            // Temporarily convert the gallery to a CSS Grid so it captures perfectly.
+            // Temporarily convert the gallery to a Flexbox Masonry so it captures perfectly while keeping the original layout.
             const soloGrid = document.getElementById('solo-grid');
+            let oldSoloHTML = '';
             let oldSoloClasses = '';
             if (soloGrid) {
+                oldSoloHTML = soloGrid.innerHTML;
                 oldSoloClasses = soloGrid.className;
-                soloGrid.className = 'grid grid-cols-2 md:grid-cols-4 gap-6';
+                
+                const items = Array.from(soloGrid.children);
+                const cols = window.innerWidth >= 1024 ? 4 : (window.innerWidth >= 768 ? 3 : (window.innerWidth >= 640 ? 2 : 1));
+                
+                const colDivs = Array.from({length: cols}, () => {
+                    const d = document.createElement('div');
+                    d.className = 'flex flex-col gap-6 w-full';
+                    return d;
+                });
+                
+                const itemsPerCol = Math.ceil(items.length / cols);
+                items.forEach((item, i) => {
+                    const colIndex = Math.floor(i / itemsPerCol);
+                    if (colDivs[colIndex]) {
+                        colDivs[colIndex].appendChild(item.cloneNode(true));
+                    } else {
+                        colDivs[cols - 1].appendChild(item.cloneNode(true));
+                    }
+                });
+                
+                soloGrid.innerHTML = '';
+                soloGrid.className = 'flex gap-6 items-start w-full';
+                colDivs.forEach(col => soloGrid.appendChild(col));
             }
+
+            // html2canvas bug: object-fit: cover images get stretched/distorted.
+            // Temporarily replace them with background-image divs.
+            const objectFitImages = document.querySelectorAll('img.object-cover');
+            const replacedImages = [];
+            objectFitImages.forEach(img => {
+                const rect = img.getBoundingClientRect();
+                const wrapper = document.createElement('div');
+                wrapper.style.width = rect.width + 'px';
+                wrapper.style.height = rect.height + 'px';
+                wrapper.style.backgroundImage = `url("${img.src}")`;
+                wrapper.style.backgroundSize = 'cover';
+                wrapper.style.backgroundPosition = 'center';
+                wrapper.style.borderRadius = window.getComputedStyle(img).borderRadius;
+                wrapper.className = img.className; // copy classes
+                
+                img.parentNode.insertBefore(wrapper, img);
+                img.style.display = 'none';
+                replacedImages.push({ img, wrapper });
+            });
 
             // Hide the sweetalert popup from the screenshot
             const swalContainer = document.querySelector('.swal2-container');
@@ -327,7 +371,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Restore UI and Styles
             if (celebrateSpan) celebrateSpan.className = oldSpanClasses;
-            if (soloGrid) soloGrid.className = oldSoloClasses;
+            if (soloGrid) {
+                soloGrid.innerHTML = oldSoloHTML;
+                soloGrid.className = oldSoloClasses;
+            }
+            replacedImages.forEach(({ img, wrapper }) => {
+                if (wrapper.parentNode) wrapper.parentNode.removeChild(wrapper);
+                img.style.display = '';
+            });
             toHide.forEach(id => { const e = document.getElementById(id); if (e) e.style.display = ''; });
             document.querySelectorAll('[data-aos]').forEach(el => {
                 el.setAttribute('style', originalStyles.get(el) || '');
