@@ -730,16 +730,11 @@
         <i class="fa-solid fa-arrow-up"></i>
     </button>
 
-    <!-- Record with Music Button -->
-    <div id="record-container" class="fixed bottom-8 right-24 z-[100]">
-        <button id="record-btn" title="Record with Music"
-            class="w-12 h-12 glass rounded-full border border-white/20 flex items-center justify-center transition-all duration-300 hover:bg-white/10 hover:scale-110">
-            <i id="record-icon" class="fa-solid fa-circle text-red-400"></i>
-        </button>
-        <div id="record-status" class="absolute -top-8 right-0 text-xs whitespace-nowrap text-white/60 hidden">
-            🔴 Recording...
-        </div>
-    </div>
+    <!-- Download Slideshow Video Button -->
+    <button id="download-video-btn" title="Download Birthday Slideshow Video"
+        class="fixed bottom-8 right-24 z-[100] w-12 h-12 glass rounded-full border border-pastelBlue/40 flex items-center justify-center transition-all duration-300 hover:bg-pastelBlue/20 hover:scale-110">
+        <i class="fa-solid fa-clapperboard text-pastelBlue"></i>
+    </button>
 
     <!-- Image Modal -->
     <div id="image-modal" class="fixed inset-0 z-[1000] flex items-center justify-center bg-black/90 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 p-4">
@@ -754,6 +749,8 @@
 
     <!-- Scripts -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mp4-muxer@5/build/mp4-muxer.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

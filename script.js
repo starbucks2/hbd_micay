@@ -212,142 +212,280 @@ document.addEventListener('DOMContentLoaded', () => {
         star.style.animationDuration = (Math.random() * 3 + 2) + 's';
         hero.appendChild(star);
     }
-    // 12. Record with Music Feature
-    const recordBtn = document.getElementById('record-btn');
-    const recordIcon = document.getElementById('record-icon');
-    const recordStatus = document.getElementById('record-status');
-    let mediaRecorder = null;
-    let recordedChunks = [];
-    let audioCtx = null;
-    let recordingActive = false;
+    // 12. Download Page-Scroll MP4 Video
+    const dlBtn = document.getElementById('download-video-btn');
 
-    async function startRecording() {
+    dlBtn.addEventListener('click', async () => {
+        dlBtn.disabled = true;
+        dlBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-pastelBlue"></i>';
+
+        Swal.fire({
+            title: '🎬 Generating MP4...',
+            html: `<div style="background:rgba(255,255,255,0.1);border-radius:8px;overflow:hidden;height:8px;margin-bottom:10px">
+                     <div id="sw-bar" style="height:100%;width:0%;background:linear-gradient(90deg,#B6E3E9,#FBD1D7);transition:width 0.3s"></div>
+                   </div>
+                   <p id="sw-txt" style="color:rgba(255,255,255,0.6);font-size:13px">Preparing...</p>`,
+            allowOutsideClick: false, showConfirmButton: false,
+            background: '#1a1a1a', color: '#fff'
+        });
+
+        const setProg = (p, t) => {
+            const b = document.getElementById('sw-bar'), l = document.getElementById('sw-txt');
+            if (b) b.style.width = p + '%';
+            if (l) l.textContent = t;
+        };
+
         try {
-            recordedChunks = [];
-
-            // Set up Web Audio context to capture bg-music
-            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            const dest = audioCtx.createMediaStreamDestination();
-
-            const music = document.getElementById('bg-music');
-            const source = audioCtx.createMediaElementSource(music);
-            source.connect(dest);
-            source.connect(audioCtx.destination); // keep playing through speakers
-
-            const audioStream = dest.stream;
-
-            // Try screen capture (desktop/some Android)
-            let combinedStream;
-            if (navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia) {
-                try {
-                    const screenStream = await navigator.mediaDevices.getDisplayMedia({
-                        video: { mediaSource: 'screen' },
-                        audio: false // we handle audio ourselves
-                    });
-
-                    // Combine screen video + music audio
-                    combinedStream = new MediaStream([
-                        ...screenStream.getVideoTracks(),
-                        ...audioStream.getAudioTracks()
-                    ]);
-
-                    // Stop recording when user stops screen share
-                    screenStream.getVideoTracks()[0].addEventListener('ended', () => {
-                        if (recordingActive) stopRecording();
-                    });
-                } catch (screenErr) {
-                    // Screen capture denied or unavailable on this device
-                    // Fall back to audio-only recording
-                    combinedStream = audioStream;
-                    Swal.fire({
-                        title: 'Screen capture not available',
-                        text: 'Recording audio only. The music will be saved as an audio file you can use while screen recording.',
-                        icon: 'info',
-                        background: '#1a1a1a',
-                        color: '#fff',
-                        confirmButtonColor: '#B6E3E9',
-                        timer: 4000,
-                        showConfirmButton: false
-                    });
-                }
-            } else {
-                // Mobile fallback: audio-only
-                combinedStream = audioStream;
-                Swal.fire({
-                    title: 'Tip for Mobile 📱',
-                    html: 'Your browser will record the <b>music audio</b>.<br>Play this alongside your screen recording for best results!',
-                    icon: 'info',
-                    background: '#1a1a1a',
-                    color: '#fff',
-                    confirmButtonColor: '#B6E3E9',
-                    timer: 5000,
-                    showConfirmButton: false
-                });
+            if (!window.VideoEncoder || !window.VideoFrame) {
+                throw new Error('WebCodecs not supported. Please use Chrome or Edge browser.');
             }
 
-            // Pick best supported format
-            const mimeType = MediaRecorder.isTypeSupported('video/webm;codecs=vp9,opus')
-                ? 'video/webm;codecs=vp9,opus'
-                : MediaRecorder.isTypeSupported('video/webm')
-                ? 'video/webm'
-                : 'audio/webm';
+            // Temporarily fix styles for capture
+            setProg(2, 'Pre-processing styles…');
+            const toHide = ['music-container','scroll-progress','back-to-top','download-video-btn'];
+            toHide.forEach(id => { const e = document.getElementById(id); if (e) e.style.display = 'none'; });
+            
+            // Force AOS elements to be fully visible and opaque
+            const originalStyles = new Map();
+            document.querySelectorAll('[data-aos]').forEach(el => {
+                originalStyles.set(el, el.getAttribute('style') || '');
+                el.style.setProperty('opacity', '1', 'important');
+                el.style.setProperty('transform', 'none', 'important');
+                el.style.setProperty('transition', 'none', 'important');
+            });
 
-            mediaRecorder = new MediaRecorder(combinedStream, { mimeType });
+            // Force typing animation to complete instantly for the video
+            const typeEl = document.getElementById('typing-text');
+            if (typeEl && typeof messageText !== 'undefined') {
+                typeEl.innerHTML = messageText;
+                if (typeof index !== 'undefined') index = messageText.length;
+            }
 
-            mediaRecorder.ondataavailable = (e) => {
-                if (e.data && e.data.size > 0) recordedChunks.push(e.data);
-            };
+            // Temporarily fix bg-clip-text for html2canvas (which makes text invisible)
+            const celebrateSpan = document.querySelector('#celebrate-btn span');
+            let oldSpanClasses = '';
+            if (celebrateSpan) {
+                oldSpanClasses = celebrateSpan.className;
+                celebrateSpan.className = 'relative z-10 text-xl font-semibold text-pastelPink flex items-center space-x-3';
+            }
 
-            mediaRecorder.onstop = () => {
-                const blob = new Blob(recordedChunks, { type: mimeType });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                const ext = mimeType.startsWith('audio') ? 'webm' : 'webm';
-                a.href = url;
-                a.download = `micay-birthday-${Date.now()}.${ext}`;
-                a.click();
-                URL.revokeObjectURL(url);
+            // html2canvas DOES NOT support CSS 'columns-X' which causes vertical squished lines.
+            // Temporarily convert the gallery to a CSS Grid so it captures perfectly.
+            const soloGrid = document.getElementById('solo-grid');
+            let oldSoloClasses = '';
+            if (soloGrid) {
+                oldSoloClasses = soloGrid.className;
+                soloGrid.className = 'grid grid-cols-2 md:grid-cols-4 gap-6';
+            }
 
-                // Clean up audio context
-                if (audioCtx) { audioCtx.close(); audioCtx = null; }
-                recordingActive = false;
-                recordIcon.className = 'fa-solid fa-circle text-red-400';
-                recordStatus.classList.add('hidden');
-                recordBtn.classList.remove('animate-pulse');
-            };
+            // Hide the sweetalert popup from the screenshot
+            const swalContainer = document.querySelector('.swal2-container');
+            const oldSwalDisplay = swalContainer ? swalContainer.style.display : '';
+            if (swalContainer) swalContainer.style.display = 'none';
 
-            mediaRecorder.start(1000); // collect data every second
-            recordingActive = true;
+            window.scrollTo(0, 0);
+            await new Promise(r => setTimeout(r, 800)); // wait for layout to settle
 
-            recordIcon.className = 'fa-solid fa-stop text-red-500';
-            recordStatus.classList.remove('hidden');
-            recordBtn.classList.add('animate-pulse');
+            setProg(5, 'Capturing full page (this may take a moment)…');
+            
+            // Capture normal page with html2canvas
+            const pageCanvas = await html2canvas(document.body, {
+                scale: 1, useCORS: true, allowTaint: true, logging: false,
+                width: document.documentElement.scrollWidth,
+                height: document.documentElement.scrollHeight,
+                windowWidth: document.documentElement.scrollWidth,
+                scrollX: 0, scrollY: 0
+            });
+
+            setProg(12, 'Capturing celebration…');
+            
+            // Now, scroll to bottom, trigger the button to show popup and confetti!
+            if (swalContainer) swalContainer.style.display = oldSwalDisplay;
+            window.scrollTo(0, document.documentElement.scrollHeight);
+            const celBtn = document.getElementById('celebrate-btn');
+            if (celBtn) celBtn.click();
+            await new Promise(r => setTimeout(r, 800)); // wait for Swal and confetti to animate in
+
+            // Hide UI chrome again just in case
+            toHide.forEach(id => { const e = document.getElementById(id); if (e) e.style.display = 'none'; });
+            const popupContainer = document.querySelector('.swal2-container');
+            if (popupContainer) popupContainer.style.background = 'transparent'; // keep background clean
+
+            // Capture the popup frame (viewport only)
+            const popupCanvas = await html2canvas(document.body, {
+                scale: 1, useCORS: true, allowTaint: true, logging: false,
+                width: window.innerWidth,
+                height: window.innerHeight,
+                windowWidth: window.innerWidth,
+                windowHeight: window.innerHeight,
+                scrollX: window.scrollX, scrollY: window.scrollY,
+                y: window.scrollY
+            });
+
+            // Close Swal
+            Swal.close();
+
+            // Restore UI and Styles
+            if (celebrateSpan) celebrateSpan.className = oldSpanClasses;
+            if (soloGrid) soloGrid.className = oldSoloClasses;
+            toHide.forEach(id => { const e = document.getElementById(id); if (e) e.style.display = ''; });
+            document.querySelectorAll('[data-aos]').forEach(el => {
+                el.setAttribute('style', originalStyles.get(el) || '');
+            });
+
+            setProg(20, 'Setting up encoder…');
+
+            // Video dimensions (landscape 16:9)
+            const W = 1280, H = 720, FPS = 30;
+            const PAUSE = 2, SCROLL = 38, TOTAL = PAUSE * 2 + SCROLL;
+            const FRAMES = TOTAL * FPS;
+
+            // Scale captured page to fit video width
+            const scaleX = W / pageCanvas.width;
+            const scaledH = pageCanvas.height * scaleX;
+            const maxScroll = Math.max(0, scaledH - H);
+
+            const vCanvas = document.createElement('canvas');
+            vCanvas.width = W; vCanvas.height = H;
+            const vCtx = vCanvas.getContext('2d');
+
+            // MP4 muxer
+            const { Muxer, ArrayBufferTarget } = Mp4Muxer;
+            const target = new ArrayBufferTarget();
+            const muxer = new Muxer({
+                target,
+                video: { codec: 'avc', width: W, height: H },
+                audio: { codec: 'aac', sampleRate: 44100, numberOfChannels: 2 },
+                fastStart: 'in-memory'
+            });
+
+            // Video encoder
+            const vEnc = new VideoEncoder({
+                output: (chunk, meta) => muxer.addVideoChunk(chunk, meta),
+                error: e => { throw e; }
+            });
+            vEnc.configure({
+                codec: 'avc1.42001f', width: W, height: H,
+                bitrate: 6_000_000, framerate: FPS
+            });
+
+            // Scale for popup
+            const popScaleX = W / popupCanvas.width;
+            const popScaledH = popupCanvas.height * popScaleX;
+
+            // Encode video frames (off-screen, fast loop)
+            for (let f = 0; f < FRAMES; f++) {
+                const sec = f / FPS;
+                let scrollY = 0;
+                
+                vCtx.fillStyle = '#0a0a0a';
+                vCtx.fillRect(0, 0, W, H);
+
+                // Show the popup in the last 2 seconds (during the final PAUSE)
+                if (sec >= PAUSE + SCROLL) {
+                    vCtx.drawImage(popupCanvas, 0, 0, popupCanvas.width, popupCanvas.height, 0, 0, W, popScaledH);
+                } else {
+                    if (sec > PAUSE && sec < PAUSE + SCROLL) {
+                        const t = (sec - PAUSE) / SCROLL;
+                        // smooth ease in-out
+                        const e = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+                        scrollY = e * maxScroll;
+                    } else if (sec >= PAUSE + SCROLL) {
+                        scrollY = maxScroll;
+                    }
+
+                    const srcY = scrollY / scaleX;
+                    const srcH = Math.min(pageCanvas.height - srcY, H / scaleX);
+                    vCtx.drawImage(pageCanvas, 0, srcY, pageCanvas.width, srcH, 0, 0, W, srcH * scaleX);
+                }
+
+                const frame = new VideoFrame(vCanvas, {
+                    timestamp: Math.round((f / FPS) * 1e6),
+                    duration: Math.round(1e6 / FPS)
+                });
+                while (vEnc.encodeQueueSize > 20) await new Promise(r => setTimeout(r, 30));
+                vEnc.encode(frame, { keyFrame: f % (FPS * 2) === 0 });
+                frame.close();
+
+                if (f % 60 === 0) {
+                    setProg(20 + Math.round((f / FRAMES) * 55), `Encoding frame ${f + 1}/${FRAMES}…`);
+                    await new Promise(r => setTimeout(r, 0));
+                }
+            }
+            await vEnc.flush();
+
+            // Audio encoder
+            setProg(78, 'Encoding audio (high quality)…');
+            const audioCtx = new AudioContext({ sampleRate: 44100 });
+            const resp = await fetch('assets/music/lifetime.mp3');
+            const audioBuf = await audioCtx.decodeAudioData(await resp.arrayBuffer());
+            await audioCtx.close();
+
+            const aEnc = new AudioEncoder({
+                output: (chunk, meta) => muxer.addAudioChunk(chunk, meta),
+                error: e => { throw e; }
+            });
+            aEnc.configure({ codec: 'mp4a.40.2', sampleRate: 44100, numberOfChannels: 2, bitrate: 192000 });
+
+            const SR = 44100;
+            const CHUNK = 44100; // 1-second chunks to prevent encoder overload (crash)
+            const totalSamples = TOTAL * SR;
+            const ch0 = audioBuf.getChannelData(0);
+            const ch1 = audioBuf.numberOfChannels > 1 ? audioBuf.getChannelData(1) : ch0;
+            const srcLen = audioBuf.length;
+
+            // Start audio exactly where the live background music is currently playing
+            const musicEl = document.getElementById('bg-music');
+            let startOffsetSamples = 0;
+            if (musicEl && !musicEl.paused) {
+                startOffsetSamples = Math.floor(musicEl.currentTime * SR);
+            }
+
+            // Smooth fade-out for the last 3 seconds
+            const fadeOutSamples = 3 * SR;
+            const fadeOutStart = totalSamples - fadeOutSamples;
+
+            for (let i = 0; i < totalSamples; i += CHUNK) {
+                const n = Math.min(CHUNK, totalSamples - i);
+                const d = new Float32Array(n * 2);
+                for (let s = 0; s < n; s++) {
+                    const currentSample = i + s;
+                    const idx = (startOffsetSamples + currentSample) % srcLen;
+                    
+                    let volume = 1.0;
+                    if (currentSample > fadeOutStart) {
+                        volume = 1.0 - ((currentSample - fadeOutStart) / fadeOutSamples);
+                    }
+
+                    d[s] = ch0[idx] * volume;
+                    d[n + s] = ch1[idx] * volume;
+                }
+                const ad = new AudioData({ format: 'f32-planar', sampleRate: SR, numberOfFrames: n, numberOfChannels: 2, timestamp: Math.round((i / SR) * 1e6), data: d });
+                while (aEnc.encodeQueueSize > 5) await new Promise(r => setTimeout(r, 50));
+                aEnc.encode(ad); ad.close();
+            }
+            await aEnc.flush();
+
+            setProg(95, 'Finalizing MP4…');
+            muxer.finalize();
+
+            const blob = new Blob([target.buffer], { type: 'video/mp4' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = 'micay-birthday.mp4';
+            document.body.appendChild(a); a.click(); document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            dlBtn.disabled = false;
+            dlBtn.innerHTML = '<i class="fa-solid fa-clapperboard text-pastelBlue"></i>';
+            Swal.fire({ title: '🎉 MP4 Ready!', text: 'micay-birthday.mp4 has been downloaded!', icon: 'success', background: '#1a1a1a', color: '#fff', confirmButtonColor: '#B6E3E9' });
 
         } catch (err) {
-            console.error('Recording error:', err);
-            Swal.fire({
-                title: 'Oops!',
-                text: 'Could not start recording. Please allow permissions and try again.',
-                icon: 'error',
-                background: '#1a1a1a',
-                color: '#fff',
-                confirmButtonColor: '#B6E3E9'
-            });
-        }
-    }
-
-    function stopRecording() {
-        if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-            mediaRecorder.stop();
-            mediaRecorder.stream.getTracks().forEach(t => t.stop());
-        }
-    }
-
-    recordBtn.addEventListener('click', () => {
-        if (!recordingActive) {
-            startRecording();
-        } else {
-            stopRecording();
+            console.error(err);
+            dlBtn.disabled = false;
+            dlBtn.innerHTML = '<i class="fa-solid fa-clapperboard text-pastelBlue"></i>';
+            const msg = err && err.message ? err.message : String(err);
+            Swal.fire({ title: 'Error', html: `<p>${msg}</p><small style="opacity:.6">Use Chrome or Edge for best results.</small>`, icon: 'error', background: '#1a1a1a', color: '#fff', confirmButtonColor: '#B6E3E9' });
         }
     });
 });
