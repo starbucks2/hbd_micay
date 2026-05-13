@@ -391,7 +391,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const W = isMobile ? 720 : 1280;
             const H = isMobile ? 1280 : 720;
             const FPS = 60; // 60 FPS for perfectly smooth scrolling without judder
-            const PAUSE = 2, SCROLL = 100, TOTAL = PAUSE * 2 + SCROLL; // 100 seconds of VERY slow scrolling
+            const PAUSE = 2.5, SCROLL = 55, TOTAL = PAUSE * 2 + SCROLL; // Exactly 60 seconds (1 minute)
             const FRAMES = TOTAL * FPS;
 
             // Scale captured page to fit video width
@@ -448,10 +448,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         scrollY = maxScroll;
                     }
 
-                    // Snap to exact pixels to prevent subpixel rendering artifacts (shaking)
-                    const srcY = Math.round(scrollY / scaleX);
-                    const srcH = Math.round(Math.min(pageCanvas.height - srcY, H / scaleX));
-                    const destH = Math.round(srcH * scaleX);
+                    // Use floating point coordinates for sub-pixel smoothness (removes "shaking" jitter)
+                    const srcY = scrollY / scaleX;
+                    const srcH = Math.min(pageCanvas.height - srcY, H / scaleX);
+                    const destH = srcH * scaleX;
                     
                     vCtx.drawImage(pageCanvas, 0, srcY, pageCanvas.width, srcH, 0, 0, W, destH);
                 }
