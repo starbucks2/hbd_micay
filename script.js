@@ -340,7 +340,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const W = isMobile ? 720 : 1280;
             const H = isMobile ? 1280 : 720;
             const FPS = 30;
-            const PAUSE = 2, SCROLL = 75, TOTAL = PAUSE * 2 + SCROLL; // 75 seconds of slow scrolling
+            const PAUSE = 2, SCROLL = 100, TOTAL = PAUSE * 2 + SCROLL; // 100 seconds of VERY slow scrolling
             const FRAMES = TOTAL * FPS;
 
             // Scale captured page to fit video width
